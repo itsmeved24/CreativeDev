@@ -1,0 +1,32 @@
+/* Marquee styles */
+.marquee-container {
+  position: relative;
+  width: 100%;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  padding: 10px 0;
+  background-color: transparent;
+}
+
+.marquee-wrapper {
+  display: flex;
+  width: fit-content;
+}
+
+.marquee-item {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0 20px;
+  font-size: 24pt;
+  line-height: 1.5;
+  color: #000;
+  font-weight: bold;
+}
+
+/* Pause on hover */
+.marquee-container:hover .marquee-wrapper {
+  animation-play-state: paused;
+}

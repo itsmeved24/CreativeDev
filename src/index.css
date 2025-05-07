@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@import url("https://use.typekit.net/igt8kpp.css");
+
+@import url('https://fonts.cdnfonts.com/css/futura-std-4');
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+
+body{
+    font-family: 'Futura PT', sans-serif;
+    background-color: #e0e0db;
+}
+
+.degular-font {
+    font-family: "degular", sans-serif;
+  }  
+
+
+.ibm-plex-mono-regular {
+    font-family: "IBM Plex Mono", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.spline-scene canvas {
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+  }
+  
+  
+/* *{
+    font-family: "acumin-pro", sans-serif;
+    font-style: normal;
+    background-color: #e0e0db;
+} */
+
+/* .degular-font{
+    font-family: "degular", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+} */
+
