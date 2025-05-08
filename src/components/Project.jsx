@@ -124,7 +124,7 @@ const Project = () => {
   }, []);
 
   // Format date as DD.MM.YY
-  const formattedDate = currentDate.toLocaleDateString('en-US', {
+  const formattedDate = currentDate.toLocaleDateString('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: '2-digit'
