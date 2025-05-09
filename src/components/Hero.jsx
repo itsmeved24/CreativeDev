@@ -76,7 +76,7 @@ const Hero = () => {
           style={{ fontFamily: '"Degular", sans-serif' }} 
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-black mt-10 sm:mt-16 md:mt-20 mb-20 sm:mb-32 md:mb-40"
         >
-          Hi, this is Vedank.
+          Hi, this is Vedank
         </h1>
 
         <p className="text-black text-base sm:text-lg my-2">
