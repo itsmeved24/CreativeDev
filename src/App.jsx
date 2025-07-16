@@ -6,20 +6,23 @@ import CursorBlur from './components/CursorBlur';
 import SplineScene from './components/SplineScene';
 import SkillsSection from './components/Skills';
 import Project from './components/Project'
+import StackSection from './components/StackSection';
+// import SmoothScroll from './components/SmoothScroll';
 
 const App = () => {
   return (
-    <>
-    <div className="relative bg-[#e0e0db]">
-      <Navbar/>
-      <Hero/>
-      {/* <SplineScene/> */}
-      {/* <SkillsSection /> */}
-      {/* <Experience/> */}
-      <Project/>
+    <div className="relative bg-[#e0e0db] min-h-screen w-full">
       <CursorBlur/>
-      </div>
-    </>
+      <Navbar/>
+      <main>
+        <Hero/>
+        {/* <StackSection/> */}
+        {/* <SplineScene/> */}
+        {/* <SkillsSection /> */}
+        {/* <Experience/> */}
+        <Project/>
+      </main>
+    </div>
   )
 }
 
