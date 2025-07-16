@@ -19,7 +19,7 @@ const initialImages = [
     alt: "Creative Development",
     width: 350,
     height: 350,
-    position: { left: "40%", top: "30%" }, // Moved slightly right
+    position: { left: "40%", top: "30%" },
     zIndex: 70,
     rotation: 0
   },
@@ -29,7 +29,7 @@ const initialImages = [
     alt: "iPhone Pro",
     width: 200,
     height: 300,
-    position: { left: "70%", top: "25%" }, // Moved slightly right
+    position: { left: "70%", top: "25%" },
     zIndex: 60,
     rotation: 0
   },
@@ -37,9 +37,9 @@ const initialImages = [
     id: 3,
     src: image3,
     alt: "Seedhe Maut Red",
-    width: 300, // Reduced size
-    height: 300, // Reduced size
-    position: { left: "60%", top: "35%" }, // Moved slightly right
+    width: 180,
+    height: 180,
+    position: { left: "60%", top: "35%" },
     zIndex: 65,
     rotation: 0
   },
@@ -49,7 +49,7 @@ const initialImages = [
     alt: "Final Image",
     width: 300,
     height: 300,
-    position: { left: "20%", top: "25%" }, // Moved slightly right
+    position: { left: "20%", top: "25%" },
     zIndex: 55,
     rotation: 0
   },
@@ -59,7 +59,7 @@ const initialImages = [
     alt: "Mockup Design",
     width: 250,
     height: 350,
-    position: { left: "35%", top: "55%" }, // Moved slightly right
+    position: { left: "35%", top: "55%" },
     zIndex: 50,
     rotation: 0
   },
@@ -69,7 +69,7 @@ const initialImages = [
     alt: "iPhone 13 Pro",
     width: 250,
     height: 350,
-    position: { left: "65%", top: "55%" }, // Moved slightly right
+    position: { left: "65%", top: "55%" },
     zIndex: 45,
     rotation: 0
   },
@@ -79,7 +79,7 @@ const initialImages = [
     alt: "Screenshot 2025",
     width: 450,
     height: 450,
-    position: { left: "10%", top: "50%" }, // Moved slightly right
+    position: { left: "10%", top: "50%" },
     zIndex: 40,
     rotation: 0
   },
@@ -89,12 +89,12 @@ const initialImages = [
     alt: "Does it Matter",
     width: 350,
     height: 250,
-    position: { left: "35%", top: "10%" }, // Moved slightly right
+    position: { left: "35%", top: "10%" },
     zIndex: 35,
     rotation: 0
   },
   {
-    id: 9, // Make sure to use a unique ID
+    id: 9,
     src: image9,
     alt: "Screenshot 2024",
     width: 350,
@@ -106,11 +106,10 @@ const initialImages = [
 ];
 
 const Project = () => {
-  // Use the initialImages directly without allowing state changes to persist
-  // This ensures the layout resets on each reload
   const [images, setImages] = useState(initialImages);
   const [draggingId, setDraggingId] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragPos, setDragPos] = useState({}); // { [id]: { x, y } }
   const [currentDate, setCurrentDate] = useState(new Date());
   const containerRef = useRef(null);
 
@@ -119,7 +118,6 @@ const Project = () => {
     const timer = setInterval(() => {
       setCurrentDate(new Date());
     }, 1000);
-
     return () => clearInterval(timer);
   }, []);
 
@@ -133,14 +131,14 @@ const Project = () => {
   // Reset images to initial positions on component mount
   useEffect(() => {
     setImages(initialImages);
+    setDragPos({});
   }, []);
 
-  // Handle mouse down and touch start
+  // Drag logic
   const handleDragStart = (e, id) => {
-    e.preventDefault(); // Prevent default to avoid text selection during drag
+    e.preventDefault();
     const image = images.find(img => img.id === id);
     if (!image) return;
-
     // Move the dragged image to the top
     setImages(prev =>
       prev.map(img =>
@@ -149,109 +147,82 @@ const Project = () => {
           : img
       )
     );
-
-    // Calculate offset from the mouse/touch position to the top-left corner of the image
     const imgRect = e.currentTarget.getBoundingClientRect();
-
-    // Get client coordinates based on event type
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
     const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-
     setDragOffset({
       x: clientX - imgRect.left,
       y: clientY - imgRect.top
     });
-
     setDraggingId(id);
   };
 
-  // Handle mouse move and touch move
-  const handleDragMove = useCallback((e) => {
-    if (draggingId === null || !containerRef.current) return;
-
-    const containerRect = containerRef.current.getBoundingClientRect();
-
-    // Get client coordinates based on event type
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-
-    // Calculate new position relative to the container
-    const newLeft = (clientX - containerRect.left - dragOffset.x) / containerRect.width * 100;
-    const newTop = (clientY - containerRect.top - dragOffset.y) / containerRect.height * 100;
-
-    // Update the image position
-    setImages(prev =>
-      prev.map(img =>
-        img.id === draggingId
-          ? { ...img, position: { left: `${newLeft}%`, top: `${newTop}%` } }
-          : img
-      )
-    );
-  }, [draggingId, dragOffset]);
-
-  // Handle mouse up and touch end
-  const handleDragEnd = useCallback(() => {
-    setDraggingId(null);
-  }, []);
-
-  // Add and remove event listeners
   useEffect(() => {
-    if (draggingId !== null) {
-      // Mouse events
-      window.addEventListener('mousemove', handleDragMove);
-      window.addEventListener('mouseup', handleDragEnd);
-
-      // Touch events
-      window.addEventListener('touchmove', handleDragMove, { passive: false });
-      window.addEventListener('touchend', handleDragEnd);
-      window.addEventListener('touchcancel', handleDragEnd);
-
-      // Add cursor styling to the whole page during drag
-      document.body.style.cursor = 'grabbing';
-    }
-
+    if (draggingId === null) return;
+    const move = (e) => {
+      if (!containerRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      const x = clientX - containerRect.left - dragOffset.x;
+      const y = clientY - containerRect.top - dragOffset.y;
+      setDragPos(pos => ({ ...pos, [draggingId]: { x, y } }));
+    };
+    const up = () => setDraggingId(null);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    window.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('touchend', up);
+    window.addEventListener('touchcancel', up);
+    document.body.style.cursor = 'grabbing';
     return () => {
-      // Mouse events
-      window.removeEventListener('mousemove', handleDragMove);
-      window.removeEventListener('mouseup', handleDragEnd);
-
-      // Touch events
-      window.removeEventListener('touchmove', handleDragMove);
-      window.removeEventListener('touchend', handleDragEnd);
-      window.removeEventListener('touchcancel', handleDragEnd);
-
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+      window.removeEventListener('touchmove', move);
+      window.removeEventListener('touchend', up);
+      window.removeEventListener('touchcancel', up);
       document.body.style.cursor = '';
     };
-  }, [draggingId, handleDragMove, handleDragEnd]);
+  }, [draggingId, dragOffset]);
 
   return (
     <section className="relative w-full h-screen bg-[#e0e0db] overflow-hidden">
       {/* Draggable Projects */}
       <div ref={containerRef} className="relative w-full h-full">
-        {images.map((image) => (
-          <div
-            key={image.id}
-            className="absolute cursor-grab active:cursor-grabbing touch-none"
-            style={{
-              left: image.position.left,
-              top: image.position.top,
-              zIndex: image.zIndex,
-              transform: `rotate(${image.rotation}deg)`,
-              transition: 'transform 0.2s ease-out'
-            }}
-            onMouseDown={(e) => handleDragStart(e, image.id)}
-            onTouchStart={(e) => handleDragStart(e, image.id)}
-          >
-            <img
-              src={image.src}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              className="rounded-lg pointer-events-none select-none shadow-lg"
-              draggable="false"
-            />
-          </div>
-        ))}
+        {images.map((image) => {
+          // Default position in percent
+          const left = image.position.left;
+          const top = image.position.top;
+          // If dragging, use pixel offset
+          const drag = dragPos[image.id];
+          return (
+            <div
+              key={image.id}
+              className="absolute cursor-grab active:cursor-grabbing touch-none"
+              style={{
+                left: drag ? 0 : left,
+                top: drag ? 0 : top,
+                zIndex: image.zIndex,
+                transform: drag
+                  ? `translate3d(${drag.x}px, ${drag.y}px, 0) rotate(${image.rotation}deg)`
+                  : `rotate(${image.rotation}deg)`,
+                transition: draggingId === image.id ? 'none' : 'transform 0.2s ease-out',
+                touchAction: 'none',
+              }}
+              onMouseDown={(e) => handleDragStart(e, image.id)}
+              onTouchStart={(e) => handleDragStart(e, image.id)}
+            >
+              <img
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                className="rounded-lg pointer-events-none select-none shadow-lg"
+                draggable="false"
+              />
+            </div>
+          );
+        })}
         
         {/* Date and Project Title at bottom left */}
         <div 
@@ -267,7 +238,6 @@ const Project = () => {
           className="absolute top-8 right-8 text-black z-[100] text-right"
           style={{ fontFamily: '"Degular", sans-serif' }}
         >
-          {/* <div className="text-3xl font-bold">{formattedDate}</div> */}
           <div className="text-3xl font-bold mt-2">FULL STACK DEVELOPER & UX ENGINEER</div>
         </div>
       </div>

@@ -65,7 +65,7 @@ const Hero = () => {
   return (
     <div 
       id="hero-section" 
-      className="relative min-h-screen w-full flex items-center justify-start bg-[#e0e0db] border-b-2 border-black px-6 sm:px-12 md:px-24 lg:px-48"
+      className="relative min-h-[calc(100vh-4rem)] w-full flex items-center justify-start bg-[#e0e0db] border-b-2 border-black px-6 sm:px-12 md:px-24 lg:px-48"
     >
       <div className="text-left w-full relative z-10">
         <p className="text-black text-lg sm:text-xl mb-4">
@@ -74,24 +74,26 @@ const Hero = () => {
         <hr className="border-black w-full my-4" />
         <h1 
           style={{ fontFamily: '"Degular", sans-serif' }} 
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-black mt-10 sm:mt-16 md:mt-20 mb-20 sm:mb-32 md:mb-40"
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-black mb-8 sm:mb-12 md:mb-16"
         >
           Hi, this is Vedank
         </h1>
 
-        <p className="text-black text-base sm:text-lg my-2">
-          <span className="font-medium">Currently →</span> <span className="font-bold">Undergrad. @Dayananda Sagar Academy of Technology and Management</span>
-        </p>
-        <p className="text-black text-base sm:text-lg my-2">
-          <span className="font-medium">Pursuing →</span> <span className="font-bold">Computer Science and Design</span>
-        </p>
-        <p className="text-black text-base sm:text-lg my-2">
-          <span className="font-medium">Delivering →</span> <span className="font-bold">Experience ☻</span>
-        </p>
+        <div className="space-y-2 mb-8">
+          <p className="text-black text-base sm:text-lg">
+            <span className="font-medium">Currently →</span> <span className="font-bold">Undergrad. @Dayananda Sagar Academy of Technology and Management</span>
+          </p>
+          <p className="text-black text-base sm:text-lg">
+            <span className="font-medium">Pursuing →</span> <span className="font-bold">Computer Science and Design</span>
+          </p>
+          <p className="text-black text-base sm:text-lg">
+            <span className="font-medium">Delivering →</span> <span className="font-bold">Experience ☻</span>
+          </p>
+        </div>
         
         {/* Marquee Banner - Full Width */}
         <div className="w-full relative">
-          <div ref={marqueeRef} className="marquee-container mt-8 overflow-hidden bg-black">
+          <div ref={marqueeRef} className="marquee-container overflow-hidden bg-black">
             <div ref={marqueeWrapperRef} className="marquee-wrapper flex">
               {[...Array(15)].map((_, index) => (
                 <div 

@@ -4,6 +4,7 @@ import linkedin from '../assets/linkedin.jpg';
 import behance from '../assets/behance.png';
 import github from '../assets/github.png';
 import 'remixicon/fonts/remixicon.css';
+import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,41 +72,51 @@ const Navbar = () => {
 
       {/* Hamburger Menu for Mobile */}
       <button
-        className="block md:hidden text-2xl"
+        className="block md:hidden text-2xl focus:outline-none"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Toggle menu"
       >
-        <i className={`ri-${isMenuOpen ? 'close-line' : 'menu-line'}`}></i>
+        <div className={`hamburger ${isMenuOpen ? 'open' : ''}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </button>
 
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <nav className="absolute top-0 left-0 w-full h-screen bg-[#e0e0db] p-4 flex flex-col items-start shadow-lg md:hidden z-50">
-          {/* Add a close button for mobile menu if not using the hamburger toggle for it */}
-          <button 
-            onClick={() => setIsMenuOpen(false)} 
-            className="self-end text-2xl mb-4">
-            <i className="ri-close-line"></i>
-          </button>
-          <div className='flex flex-col w-full'> {/* Ensure full width for mobile links */}
-          {[ { name: 'WORK', id: '#work' }, { name: 'ABOUT', id: '#about' }, { name: 'CREATIVE', id: '#creative' } ].map((item, index) => (
-            <a
-              key={index}
-              href={item.id} // Changed to section ID
-              onClick={(e) => handleNavClick(e, item.id)}
-              className="degular-font text-sm py-2 w-full text-left font-medium tracking-wider hover:bg-black hover:text-[#e0e0db] transition duration-450 line-through"
-            >
-              {item.name}
-            </a>
-          ))}
+      <nav
+        className={`fixed top-0 left-0 w-full h-screen bg-[#e0e0db] p-4 flex flex-col items-start shadow-lg md:hidden z-50 transition-transform duration-500 ease-in-out ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{ pointerEvents: isMenuOpen ? 'auto' : 'none' }}
+      >
+        <button 
+          onClick={() => setIsMenuOpen(false)} 
+          className="self-end text-2xl mb-4"
+        >
+          <div className="hamburger open">
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
-          <div className="flex gap-4 mt-4">
-            <img className='w-5 h-5 object-cover' src={cv} alt="CV"/>
-            <img className='w-5 h-5 object-cover' src={linkedin} alt="Linkedin" />
-            <img className='w-5 h-5 object-cover' src={github} alt="Github" />
-            <img className='w-5 h-5 object-cover' src={behance} alt="Behance" />
-          </div>
-        </nav>
-      )}
+        </button>
+        <div className='flex flex-col w-full'> {/* Ensure full width for mobile links */}
+        {[ { name: 'WORK', id: '#work' }, { name: 'ABOUT', id: '#about' }, { name: 'CREATIVE', id: '#creative' } ].map((item, index) => (
+          <a
+            key={index}
+            href={item.id} // Changed to section ID
+            onClick={(e) => handleNavClick(e, item.id)}
+            className="degular-font text-sm py-2 w-full text-left font-medium tracking-wider hover:bg-black hover:text-[#e0e0db] transition duration-450 line-through"
+          >
+            {item.name}
+          </a>
+        ))}
+        </div>
+        <div className="flex gap-4 mt-4">
+          <img className='w-5 h-5 object-cover' src={cv} alt="CV"/>
+          <img className='w-5 h-5 object-cover' src={linkedin} alt="Linkedin" />
+          <img className='w-5 h-5 object-cover' src={github} alt="Github" />
+          <img className='w-5 h-5 object-cover' src={behance} alt="Behance" />
+        </div>
+      </nav>
     </header>
   );
 };
