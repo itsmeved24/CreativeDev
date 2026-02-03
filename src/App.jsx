@@ -1,5 +1,7 @@
 import React from 'react'
 import Navbar from './components/Navbar';
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import Hero from './components/Hero';
 import Experience from './components/Experience';
 import CursorBlur from './components/CursorBlur';
@@ -12,15 +14,17 @@ import StackSection from './components/StackSection';
 const App = () => {
   return (
     <div className="relative bg-[#e0e0db] min-h-screen w-full">
-      <CursorBlur/>
-      <Navbar/>
+      <CursorBlur />
+      <Navbar />
       <main>
-        <Hero/>
+        <Hero />
         {/* <StackSection/> */}
         {/* <SplineScene/> */}
         {/* <SkillsSection /> */}
         {/* <Experience/> */}
-        <Project/>
+        <Project />
+        <Analytics />
+        <SpeedInsights />
       </main>
     </div>
   )
