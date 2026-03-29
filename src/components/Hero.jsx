@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { gsap } from 'gsap';
+import FluidBlob from './FluidBlob';
 import '../grained.js'; // Adjust the import path based on your file structure
 
 const Hero = () => {
@@ -42,16 +43,16 @@ const Hero = () => {
     if (marqueeWrapperRef.current) {
       // Reset any previous animations
       gsap.killTweensOf(marqueeWrapperRef.current);
-      
+
       // Clone the marquee items to ensure we have enough content
       const marqueeItems = document.querySelectorAll('.marquee-item');
-      
+
       // Calculate the total width of all items
       let totalWidth = 0;
       marqueeItems.forEach(item => {
         totalWidth += item.offsetWidth;
       });
-      
+
       // Create the animation
       gsap.to(marqueeWrapperRef.current, {
         x: -totalWidth / 2,
@@ -63,17 +64,18 @@ const Hero = () => {
   }, []);
 
   return (
-    <div 
-      id="hero-section" 
+    <div
+      id="hero-section"
       className="relative min-h-[calc(100vh-4rem)] w-full flex items-center justify-start bg-[#e0e0db] border-b-2 border-black px-6 sm:px-12 md:px-24 lg:px-48"
     >
+      <FluidBlob />
       <div className="text-left w-full relative z-10">
         <p className="text-black text-lg sm:text-xl mb-4">
           Based in Bangalore → <span className="font-bold">{time}</span>
         </p>
         <hr className="border-black w-full my-4" />
-        <h1 
-          style={{ fontFamily: '"Degular", sans-serif' }} 
+        <h1
+          style={{ fontFamily: '"Degular", sans-serif' }}
           className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-black mb-8 sm:mb-12 md:mb-16"
         >
           Hi, this is Vedank
@@ -90,18 +92,18 @@ const Hero = () => {
             <span className="font-medium">Delivering →</span> <span className="font-bold">Experience ☻</span>
           </p>
         </div>
-        
+
         {/* Marquee Banner - Full Width */}
         <div className="w-full relative">
           <div ref={marqueeRef} className="marquee-container overflow-hidden bg-black">
             <div ref={marqueeWrapperRef} className="marquee-wrapper flex">
               {[...Array(15)].map((_, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="marquee-item whitespace-nowrap px-4"
-                  style={{ 
-                    fontFamily: '"Degular", sans-serif', 
-                    color: '#e0e0db', 
+                  style={{
+                    fontFamily: '"Degular", sans-serif',
+                    color: '#e0e0db',
                     fontWeight: 'bold',
                     fontSize: '20px',
                     padding: '10px 20px'
